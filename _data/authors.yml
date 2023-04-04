@@ -152,8 +152,9 @@ authors:
         name: 'Alexander Cheshire'
         picture: picture.jpg
     acmstanley:
-        name: Aiden Stanley
+        name: 'Aiden Stanley'
         picture: picture.png
+        author-summary: 'A software developer who prides himself on getting things right the 21st time. Every blunder is a lesson, and boy, have I learned a lot!'
     afiddes:
         name: 'Avril Fiddes'
         picture: picture.png
