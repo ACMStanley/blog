@@ -5,6 +5,7 @@ active-authors:
     - abirch
     - acarr
     - acaulfield
+    - acmstanley
     - ahickman
     - alee
     - amjones
@@ -150,6 +151,9 @@ authors:
     acheshire:
         name: 'Alexander Cheshire'
         picture: picture.jpg
+    acmstanley:
+        name: Aiden Stanley
+        picture: picture.png
     afiddes:
         name: 'Avril Fiddes'
         picture: picture.png
