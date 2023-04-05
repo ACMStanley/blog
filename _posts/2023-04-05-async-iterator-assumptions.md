@@ -9,7 +9,7 @@ During a recently finished project, I was ~~forced~~ guided through all things a
 
 During the project, I commited the developer crime of using the 'A' word sparingly. The ’A’ word is a dangerous weapon in the programmers arsenal. We’ve all been guilty of a using the ‘A’ word at some point. Often times we use the ‘A’ word when we think no one is listening, but the word ‘assume’ always comes back to bite you. While working with async iterators, I made some subtle assumptions that I didn’t even realise I was making, that caused some bizzare and seemingly unexplainable behaviour. The purpose of this blog post is to confront these dodgy assumptions publicly, so they don't trip you up like they did me.
 
-## Assumption 1: Order of Execution
+## Assumption on Order of Execution
 
 In a plain old synchrounous iterator, the order of: `next()` being called, code being executed, and results being yielded, is trivial. In most cases, you can basically treat all 3 as one atomic step. However, in async iterators, this is not the case.
 
@@ -72,7 +72,7 @@ However the actual output of this code is:
 Generator created
 Generator started
 {value: 1, done: false}
-After first next
+After first nextfinally
 Generator resumed
 {value: 2, done: false}
 After second next
@@ -81,12 +81,16 @@ Generator completed
 After third next
 ~~~
 
-## Assumption 2: Generator 'return' Behaviour
+Proving that 
+
+## Assumption on AsyncGenerator's 'return' Behaviour
 
 According to the Mozilla JavaScript docs:
->"*The return() method of an async generator acts as if a return statement is inserted in the generator's body at the current suspended position, which finishes the generator and allows the generator to perform any cleanup tasks when combined with a try...finally block.*"
 
-Below is a code example that demonstrates this behaviour:
+>"*The return() method of an async generator acts as if a return statement is inserted in the generator's body at the current suspended position, which finishes the generator and allows the generator to perform any cleanup tasks when combined with a `try...finally` block.*"
+
+Below is a code example that demonstrates this feature:
+
 ~~~ javascript
 async function* myGenerator() {
   try {
@@ -103,5 +107,60 @@ gen.return();
 await gen.next().then(result => console.log(result));
 ~~~
 
-After
+After the first `next()` is invoked and `1` is yielded, `return()` is called. This executes the cleanup code in the `finally` block and closes finishes the iterator. The next time `next()` is called, since the iterator is finished, a 'done' result is returned rather than `2`.
+
+For proof and clarity, this is the output of the example code block:
+~~~
+{value: 1, done: false}
+Generator cleanup code executed
+{value: undefined, done: true}
+~~~
+
+This is quite a simple example, as the logic of this generator is essentially synchronous, and the behaviour is actually identical to that of a synchrounous iterator. The complexity comes when we start adding asynchronous logic into the main body of the generator.
+
+Consider the following example:
+
+~~~ javascript
+async function* myGenerator() {
+  try {
+    await new Promise((resolve) => setTimeout(resolve, 10000));
+    yield 1;
+    yield 2;
+  } finally {
+    console.log("Generator cleanup code executed");
+  }
+}
+
+const gen = myGenerator();
+gen.next();
+gen.return().then((result) => console.log(result));
+~~~
+
+This was my incorrect assumption of what would happen:
+1. `next()` is called.
+2. Since `gen.next()` is not prepended with `await`, `gen.return()` is immediatly called.
+3. The iterator immediatly finishes, and "*Generator cleanup code executed*" is printed to the console.
+
+What actually happens is that after the first `next()` is called - and `return()` is immediatly called - is the iterator waits 10 seconds for the promise to resolve before the cleanup code is run and "*Generator cleanup code executed*" is printed. This might seem like only a trivial issue, but this can be a dangerous assumption to hold when we consider a real-life example:
+
+~~~ javascript
+async function* myStringTransformer() {
+  try {
+    /*open data pipeline*/
+    while(true){
+      const datum = await /*next value from data pipeline*/
+      yield datum.toString();
+    }
+  } finally {
+    /*Close pipeline*/
+  }
+}
+~~~
+
+The pseudocode above shows a generator that opens a data pipeline, and transforms each datum that comes through pipeline into a string. The `finally` block defines the cleanup, which closes the pipeline. The intended use is that once we are done with this transformer, we call `return()`, signalling it to close the pipeline. The happy path to this example is that data is coming through quickly and consistently; after calling `return()` the next time some data comes through, the pipeline will be closed. But what about in the case where no data comes for another hour? or no data ever comes through again? the pipeline will remain open indefinitely. Depending on the application, this could be a one way ticket to memory leak town; population: me.
+
+
+
+
+
 
