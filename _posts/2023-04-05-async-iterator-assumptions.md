@@ -171,7 +171,7 @@ The happy path to this example is that data is coming through quickly and consis
 
 ## Conclusion
 
-To sum it up, as is with all async logic, working with async iterators and generators in JavaScript can be tricky. If you assume things about their behavior, it can cause some weird and unwanted results. Get yourself a little guinea pig like me, or practice some toy examples in a non critical environment. But at the end of the day, sometimes you just need to make some good, old-fasioned engineering mistakes to learn some good, old fashioned engineering lessons.
+To sum it up, as is with all thinsg async, working with async iterators and generators in JavaScript can be tricky. If you assume things about their behavior, it can cause some weird and unwanted results. Get yourself a little guinea pig like me, or practice some toy examples in a non critical environment. But at the end of the day, sometimes you just need to make some good, old-fasioned engineering mistakes to learn some good, old fashioned engineering lessons.
 
 
 
