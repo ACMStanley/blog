@@ -167,7 +167,7 @@ async function* myStringTransformer() {
 
 The pseudocode above shows a generator that opens a data pipeline, and transforms each datum that comes through the pipeline into a string. The `finally` block defines the cleanup, which closes the pipeline. The intended use is that once we are done with this transformer, we call `return()`, signalling it to close the pipeline. 
 
-The happy path to this example is that data is coming through quickly and consistently; after calling `return()` the next time some data comes through, the pipeline will be closed. But what about in the case where `return()` is called, and no data comes for another hour? or no data ever comes through again? the pipeline will remain open indefinitely. Depending on the application, this could be a one way ticket to memory leak town; population: you.
+The happy path to this example is that data is coming through quickly and consistently; after calling `return()` the next time some data comes through, the pipeline will be closed. But what about in the case where `return()` is called, and no data comes for another hour? Or no data ever comes through again? The pipeline will remain open indefinitely. Depending on the application, this could be a one way ticket to memory leak town; population: you.
 
 ## Conclusion
 
