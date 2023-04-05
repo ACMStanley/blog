@@ -1,6 +1,6 @@
 ---
 author: acmstanley
-title: How to Think Async: 3 (not so) Surprising Behaviours of Asynchronous Iterators in JavaScript
+title: 'How to Think Async: 3 (not so) Surprising Behaviours of Asynchronous Iterators in JavaScript'
 layout: default_post
 ---
 
