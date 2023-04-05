@@ -1,6 +1,6 @@
 ---
 author: acmstanley
-title: 'How to Think Async: Surprising Behaviours of Asynchronous Iterators in JavaScript'
+title: 'How to Think Async: Surprising Behaviours of Asynchronous Iterators and Generators in JavaScript'
 layout: default_post
 date: 2023-04-05 00:00:00 Z
 ---
@@ -30,20 +30,20 @@ const gen = myAsyncGenerator();
 
 console.log("Generator created");
 
-gen.next().then(result => {
-  console.log(result); // { value: 1, done: false }
+await gen.next().then(result => {
+  console.log(result);
 });
 
 console.log("After first next");
 
-gen.next().then(result => {
-  console.log(result); // { value: 2, done: false }
+await gen.next().then(result => {
+  console.log(result);
 });
 
 console.log("After second next");
 
-gen.next().then(result => {
-  console.log(result); // { value: undefined, done: true }
+await gen.next().then(result => {
+  console.log(result);
 });
 
 console.log("After third next");
@@ -51,14 +51,38 @@ console.log("After third next");
 
 In this example, we create an async generator function that logs a message when it starts, resumes, and completes. We then create an instance of the generator and call the next method three times, logging messages before and after each call.
 
-The output of this code is:
+If my assumption on the order of execution was correct the ouput would be: 
+
+~~~
+Generator started
+Generator created
+{value: 1, done: false}
+Generator resumed
+After first next
+{value: 2, done: false}
+Generator completed
+After second next
+{value: undefined, done: true}
+After third next
+~~~
+
+However the actual output of this code is:
 
 ~~~
 Generator created
 Generator started
+{value: 1, done: false}
 After first next
-After second next
-After third next
 Generator resumed
+{value: 2, done: false}
+After second next
 Generator completed
+{value: undefined, done: true}
+After third next
 ~~~
+
+## Assumption 2: Generator 'return' Behaviour
+
+According to the Mozilla JavaScript docs:
+>The return() method of a generator acts as if a return statement is inserted in the generator's body at the current suspended position, which finishes the generator and allows the generator to perform any cleanup tasks when combined with a try...finally block.
+
