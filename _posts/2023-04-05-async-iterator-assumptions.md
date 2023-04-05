@@ -15,7 +15,7 @@ During the project, I committed a software developer crime: a liberal use of the
 
 In a plain old synchrounous iterator, the order of code being executed and results being yielded after a `next()` call is trivial. In most cases, you can basically treat it all as one atomic step. However, in async iterators, this is not the case.
 
-I initially assumed that yield statements acted like a block. I.e. code is executed greedliy until it reaches a yield statement, the iterator waits until `next()` is called, before immediatly returning the result once it is. In reality, async iterators don't execute any code at all until `next()` is called. At which point, all code up to the first yield statement is executed before returning the result.
+I initially assumed that yield statements acted like a block. I.e. code is executed greedliy until it reaches a yield statement, the iterator waits until `next()` is called, before immediatly returning the result once it is. In reality, async iterators don't execute any code at all until `next()` is called. At which point, all code up to the next yield statement is executed before returning the result.
 
 Here is an example to illustrate this behaviour:
 
