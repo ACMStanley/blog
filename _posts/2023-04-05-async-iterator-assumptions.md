@@ -2,6 +2,7 @@
 author: acmstanley
 title: 'How to Think Async: 3 (not so) Surprising Behaviours of Asynchronous Iterators in JavaScript'
 layout: default_post
+date: 2023-04-05 00:00:00 Z
 ---
 
 During a recently finished project, I was ~forced~ guided through all things async in JavaScript by an excellent mentor. He even rewarded me with a [vim clutch](https://blog.scottlogic.com/2022/12/08/building-a-rusty-vim-clutch.html) for my hard-pressed asynchronous efforts. A lot of our time on said project involved a heavy focus on asynchronous iterators; a relatively young feature of JavaScript, introduced in ES2018. If you aren’t already familiar with async iterators; their cousin: the iterator; or even their uncles: the generator and async generator; Sam has kindly covered those in <a href="https://blog.scottlogic.com/2020/04/22/Async-Iterators-Across-Execution-Contexts.html">one of his posts</a>.
@@ -10,7 +11,9 @@ The ’A’ word is a dangerous weapon in the programmers arsenal. We’ve all b
 
 ## Assumption 1: Order of Execution 
 
-The first assumption that we made is that: when an async iterator encounters a yield statement, the code up to that point will be executed, and then the iterator will wait until the next method is called before continuing. In reality, when an async iterator encounters a yield statement, the code up to that point is not immediately executed. Instead, the iterator waits until ‘next’ is called, and then executes all code up to the next yield statement.
+in a plain old synchrounous iterator, the order that
+
+The first assumption that we made is that: on intialisation, or after each yield, the async iterator will execute all the code up to the next yield statement and then wait for next to be called before immediatly yielding the return result. In reality, when an async iterator encounters a yield statement, the code up to that point is not immediately executed. Instead, the iterator waits until ‘next’ is called, and then executes all code up to the next yield statement.
 
 Here is an example to illustrate this behaviour:
 
