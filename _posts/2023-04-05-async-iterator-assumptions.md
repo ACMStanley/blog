@@ -7,7 +7,9 @@ date: 2023-04-05 00:00:00 Z
 
 During a recent project, I was forced into the dark abyss of asynchronous programming in JavaScript, kicking and screaming. But thankfully, my mentor was there to hold my hand and guide me through it. He even rewarded me with a [vim clutch](https://blog.scottlogic.com/2022/12/08/building-a-rusty-vim-clutch.html) for my hard-pressed asynchronous efforts. 
 
-A lot of our time on said project involved a heavy focus on asynchronous iterators; a relatively young feature of JavaScript, introduced in ES2018. If you aren’t already familiar with async iterators; their older cousin: the iterator; or even their uncles: the generator and async generator; Sam has generously covered those in <a href="https://blog.scottlogic.com/2020/04/22/Async-Iterators-Across-Execution-Contexts.html">one of his posts</a>. While working with async iterators, I made some subtle sub-conscious assumptions, that caused some bizzare and seemingly unexplainable behaviour. The purpose of this blog post is to confront these dodgy assumptions publicly, so they don't trip you up like they did me.
+A lot of our time on said project involved a heavy focus on asynchronous iterators; a relatively young feature of JavaScript, introduced in ES2018. If you aren’t already familiar with async iterators; their older cousin: the iterator; or even their uncles: the generator and async generator; Sam has generously covered those in <a href="https://blog.scottlogic.com/2020/04/22/Async-Iterators-Across-Execution-Contexts.html">one of his posts</a>. 
+
+While working with async iterators, I made some subtle sub-conscious assumptions, that caused some bizzare and seemingly unexplainable behaviour. The purpose of this blog post is to confront these dodgy assumptions publicly, so they don't trip you up like they did me.
 
 ## Assumption on Order of Execution
 
@@ -169,7 +171,9 @@ The happy path to this example is that data is coming through quickly and consis
 
 ## Conclusion
 
-To sum it up, as is with all things async, working with async iterators and generators in JavaScript can be tricky foor our monkey brains. If you assume things about their behavior, it can cause some weird and unwanted results. Get yourself a little guinea pig like me, or practice some toy examples in a non-critical environment. But at the end of the day, you're probably not going to do that. Sometimes you just need to make some good, old-fasioned engineering mistakes to learn some good, old fashioned engineering lessons.
+To sum it up, as is with all things async, working with async iterators and generators in JavaScript can be tricky for our monkey brains. If you assume things about their behavior, it can cause some weird and unwanted results. Get yourself a little guinea pig like me, or practice some toy examples in a non-critical environment. 
+
+But at the end of the day, you're probably not going to do that. Sometimes you just need to make some good, old-fasioned engineering mistakes to learn some good, old fashioned engineering lessons.
 
 
 
